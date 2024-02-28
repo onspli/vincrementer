@@ -8,21 +8,21 @@ fn read_arg_version() -> String {
     args[1].clone()
 }
 
-fn increment_patch_semantic(input_version: &mut semver::Version) -> String {
-    input_version.patch = input_version.patch + 1;
-    input_version.build = BuildMetadata::EMPTY;
-    input_version.pre = Prerelease::EMPTY;
-    input_version.to_string()
+fn increment_patch_semantic(mut version: semver::Version) -> String {
+    version.patch = version.patch + 1;
+    version.build = BuildMetadata::EMPTY;
+    version.pre = Prerelease::EMPTY;
+    version.to_string()
 }
 
-fn increment_patch_arbitrary(_input_version: &String) -> String {
+fn increment_patch_arbitrary(_version: &String) -> String {
     String::from("not semantic")
 }
 
-fn increment_patch(input_version: &String) -> String {
-    match semver::Version::parse(input_version) {
-        Ok(mut version) => increment_patch_semantic(&mut version),
-        Err(_err) => increment_patch_arbitrary(input_version),
+fn increment_patch(version: &String) -> String {
+    match semver::Version::parse(version) {
+        Ok(semantic_version) => increment_patch_semantic(semantic_version),
+        Err(_err) => increment_patch_arbitrary(version),
     }
 }
 
