@@ -15,8 +15,33 @@ fn increment_patch_semantic(mut version: semver::Version) -> String {
     version.to_string()
 }
 
-fn increment_patch_arbitrary(_version: &String) -> String {
-    String::from("not semantic")
+fn increment_patch_arbitrary(version: &String) -> String {
+    match version.rsplit_once('.') {
+        None => {
+            let mut result = String::new();
+            result.push_str(&version);
+            result.push_str(".1");
+            result
+        }
+        Some((prefix, postfix)) => {
+            let mut result = String::new();
+            result.push_str(prefix);
+            match postfix.parse::<i32>() {
+                Ok(number) => {
+                    result.push_str(".");
+                    let number = number + 1;
+                    result.push_str(&number.to_string());
+                    result
+                },
+                Err(_err) => {
+                    result.push_str(".");
+                    result.push_str(postfix);
+                    result.push_str(".1");
+                    result
+                }
+            }
+        }
+    }
 }
 
 fn increment_patch(version: &String) -> String {
