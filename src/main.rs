@@ -68,7 +68,7 @@ mod tests {
 
     #[test]
     fn test_increment_patch_semantic_meta() {
-        assert_eq!(increment_patch(&String::from("1.2.3-blabla")), "1.2.4");
+        assert_eq!(increment_patch(&String::from("1.2.3-alfa.5")), "1.2.4");
     }
 
     #[test]
@@ -93,5 +93,5 @@ mod tests {
     fn test_increment_patch_arbitrary_postfix_not_number() {
         assert_eq!(increment_patch(&String::from("any.1.0x1")), "any.1.0x1.1");
     }
-    
+
 }
