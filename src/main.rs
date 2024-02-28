@@ -32,7 +32,7 @@ fn increment_patch_arbitrary(version: &String) -> String {
                     let number = number + 1;
                     result.push_str(&number.to_string());
                     result
-                },
+                }
                 Err(_err) => {
                     result.push_str(".");
                     result.push_str(postfix);
@@ -55,4 +55,43 @@ fn main() {
     let input_version = read_arg_version();
     let output_version = increment_patch(&input_version);
     println!("{output_version}");
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::increment_patch;
+
+    #[test]
+    fn test_increment_patch_semantic() {
+        assert_eq!(increment_patch(&String::from("1.2.3")), "1.2.4");
+    }
+
+    #[test]
+    fn test_increment_patch_semantic_meta() {
+        assert_eq!(increment_patch(&String::from("1.2.3-blabla")), "1.2.4");
+    }
+
+    #[test]
+    fn test_increment_patch_arbitrary_no_delimiter() {
+        assert_eq!(increment_patch(&String::from("anything")), "anything.1");
+    }
+
+    #[test]
+    fn test_increment_patch_arbitrary_delimiter_1() {
+        assert_eq!(increment_patch(&String::from("anything.1")), "anything.2");
+    }
+
+    #[test]
+    fn test_increment_patch_arbitrary_delimiter_2() {
+        assert_eq!(
+            increment_patch(&String::from("anything.1.2")),
+            "anything.1.3"
+        );
+    }
+
+    #[test]
+    fn test_increment_patch_arbitrary_postfix_not_number() {
+        assert_eq!(increment_patch(&String::from("any.1.0x1")), "any.1.0x1.1");
+    }
+    
 }
